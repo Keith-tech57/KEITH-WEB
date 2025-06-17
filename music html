@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Music Downloader</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #001f3f;
+      font-family: monospace;
+      text-align: center;
+      color: white;
+    }
+    .box {
+      margin: 50px auto;
+      padding: 30px;
+      width: 320px;
+      background: rgba(0, 0, 50, 0.5);
+      border: 1px solid #00f0ff;
+      border-radius: 15px;
+    }
+    h1 {
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      width: 90%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .glow-btn {
+      background: #00ffff;
+      color: black;
+      padding: 12px;
+      width: 90%;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 0 20px #00ffff;
+      transition: 0.3s;
+    }
+    .glow-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 30px #00ffff, 0 0 50px #00ffff;
+    }
+    .loader {
+      border: 4px solid #00ffff;
+      border-top: 4px solid transparent;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 15px auto;
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>MUSIC SEARCH</h1>
+    <input type="text" placeholder="Enter song name..." id="songName">
+    <button class="glow-btn" onclick="downloadSong()">DOWNLOAD</button>
+    <div class="loader" id="loader"></div>
+  </div>
+
+<script>
+  async function searchSong() {
+    const songName = document.getElementById('songName').value.trim();
+    const loader = document.getElementById('loader');
+    const downloadContainer = document.getElementById('downloadContainer');
+
+    if (!songName) {
+      alert('Please enter a song name.');
+      return;
+    }
+
+    loader.style.display = 'block';
+    downloadContainer.innerHTML = '';
+
+    try {
+      const videoId = await getYouTubeVideoId(songName);
+
+      if (videoId) {
+        const title = songName.charAt(0).toUpperCase() + songName.slice(1); // Simulated title
+
+        const titleEl = document.createElement('p');
+        titleEl.textContent = `Found: ${title}`;
+        titleEl.style.marginBottom = '15px';
+        titleEl.style.fontWeight = 'bold';
+        titleEl.style.color = '#00ffff';
+        titleEl.style.textShadow = '0 0 8px #00ffff';
+        const downloadBtn = document.createElement('a');
+        downloadBtn.textContent = 'DOWNLOAD';
+        downloadBtn.href = `https://api.gifted.my.id/api/download/ytmp3?apikey=gifted&url=${encodeURIComponent(song.url)}`; // Simulated download link
+        downloadBtn.className = 'glow-btn';
+        downloadBtn.setAttribute('download', '');
+
+        downloadContainer.appendChild(titleEl);
+        downloadContainer.appendChild(downloadBtn);
+      } else {
+        downloadContainer.innerHTML = 'Song not found.';
+      }
+    } catch (error) {
+      console.error(error);
+      downloadContainer.innerHTML = 'An error occurred.';
+    } finally {
+      loader.style.display = 'none';
+    }
+  }
+
+  async function getYouTubeVideoId(query) {
+    // Simulated search - replace with actual API
+    return 'dQw4w9WgXcQ'; // Replace with actual search logic
+  }
+</script>
+</body>
+</html>
